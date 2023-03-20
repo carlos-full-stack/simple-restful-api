@@ -62,6 +62,10 @@ class ProductController extends AbstractController
   
         $product->setName($request->request->get('name'));
         $product->setDescription($request->request->get('description'));
+        $product->setWeight($request->request->get('weight'));
+        $product->setIsAvailable($request->request->get('isAvailable'));
+        $product->setQty($request->request->get('qty'));
+        $product->setImage($request->request->get('image'));
         $entityManager->flush();
   
         return $this->json($pg->generateProductData($product));
