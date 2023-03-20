@@ -68,6 +68,24 @@ class ProductController extends AbstractController
      
     }
 
+/**
+* @Route("/product/{id}", name="product_delete", methods={"DELETE"})
+*/
+
+    public function deleteProduct(ManagerRegistry $doctrine, int $id): JsonResponse
+    {
+        $entityManager = $doctrine->getManager();
+        $product = $entityManager->getRepository(Product::class)->find($id);
+  
+        if (!$product) return $this->json('Product not found by id ' . $id , 404);
+  
+        $entityManager->remove($product);
+        $entityManager->flush();
+  
+        return $this->json('Product deleted with id ' . $id);
+    
+    }
+
 
 
 }
