@@ -33,6 +33,29 @@ class ProductController extends AbstractController
 
 
 /**
+* @Route("/products/new", name="product_new", methods={"POST"})
+*/
+
+public function newProduct(ManagerRegistry $doctrine, Request $request): JsonResponse
+{
+    $entityManager = $doctrine->getManager();
+    $product = new Product();
+    $product->setName($request->request->get('name'));
+    $product->setDescription($request->request->get('description'));
+    $product->setWeight($request->request->get('weight'));
+    $product->setIsAvailable($request->request->get('isAvailable'));
+    $product->setQty($request->request->get('qty'));
+    $product->setImage($request->request->get('image'));
+
+
+    $entityManager->persist($product);
+    $entityManager->flush();
+
+    return $this->json('New product has been added with id ' . $product->getId());
+}
+
+
+/**
 * @Route("/product/{id}", name="product_show", methods={"GET"})
 */
     public function showProduct(ManagerRegistry $doctrine, ProductGenerator $pg, int $id): JsonResponse
@@ -58,7 +81,6 @@ class ProductController extends AbstractController
         $product = $entityManager->getRepository(Product::class)->find($id);
   
         if (!$product) return $this->json('Product not found by id ' . $id , 404);
-
   
         $product->setName($request->request->get('name'));
         $product->setDescription($request->request->get('description'));
