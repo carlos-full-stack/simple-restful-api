@@ -5,19 +5,22 @@ namespace App\Entity;
 use App\Repository\ProductRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 class Product
 {
+    
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 150)]
+    #[ORM\Column(length: 50)]
     private ?string $name = null;
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[ORM\Column(type: Types::TEXT, length: 255, nullable: true)]
     private ?string $description = null;
 
     #[ORM\Column(length: 20, nullable: true)]
@@ -26,7 +29,10 @@ class Product
     #[ORM\Column(nullable: true)]
     private ?bool $isAvailable = null;
 
-    #[ORM\Column(nullable: true)]
+    /**
+     * @Assert\Type("integer")
+     */
+    #[ORM\Column]
     private ?int $qty = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -124,4 +130,48 @@ class Product
 
         return $this;
     }
+
+    
+
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
+    {
+        $metadata->addPropertyConstraint('name', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('name', new Assert\Length([
+            'min' => 2,
+            'max' => 50,
+            'minMessage' => 'Name must be at least {{ limit }} characters long',
+            'maxMessage' => 'Name cannot be longer than {{ limit }} characters',
+        ]));
+
+        $metadata->addPropertyConstraint('description', new Assert\Length([
+            'min' => 2,
+            'max' => 255,
+            'minMessage' => 'Description must be at least {{ limit }} characters long',
+            'maxMessage' => 'Description cannot be longer than {{ limit }} characters',
+        ]));
+
+        $metadata->addPropertyConstraint('weight', new Assert\Length([
+            'max' => 20,
+            'maxMessage' => 'Description cannot be longer than {{ limit }} characters',
+        ]));
+
+
+         $metadata->addPropertyConstraint('qty', new Assert\Type([
+            'type' => 'integer',
+            'message' => 'The value {{ value }} is not a valid {{ type }}.',
+        ]));
+
+
+        $metadata->addPropertyConstraint('qty', new Assert\Length([
+            'max' => 4,
+            'maxMessage' => 'Description cannot be longer than {{ limit }} characters',
+        ]));
+        
+
+   
+
+    }
+
+    
+
 }
