@@ -24,7 +24,7 @@ class DataGenerator
                 'isAvailable' => $product->isIsAvailable(),
                 'qty' => $product->getQty(),
                 'image' => $product->getImage(),
-                'category' => $product->getCategory()->getId(),
+                //'category' => $product->getCategory()->getId(),
 
                 ];
             }
