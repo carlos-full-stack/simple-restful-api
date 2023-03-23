@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Mapping\ClassMetadata as MappingClassMetadata;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 class Category
@@ -102,5 +104,27 @@ class Category
         }
 
         return $this;
+    }
+
+
+    public static function loadValidatorMetadata(MappingClassMetadata $metadata)
+    {
+        $metadata->addPropertyConstraint('name', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('name', new Assert\Length([
+            'min' => 2,
+            'max' => 50,
+            'minMessage' => 'Name must be at least {{ limit }} characters long',
+            'maxMessage' => 'Name cannot be longer than {{ limit }} characters',
+        ]));
+
+        $metadata->addPropertyConstraint('description', new Assert\Length([
+            'min' => 2,
+            'max' => 255,
+            'minMessage' => 'Description must be at least {{ limit }} characters long',
+            'maxMessage' => 'Description cannot be longer than {{ limit }} characters',
+        ]));
+
+   
+
     }
 }
