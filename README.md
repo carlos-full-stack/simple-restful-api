@@ -37,7 +37,6 @@ $ symfony serve
 | **POST**     | /api/product/{id}           | Show product by id    |
 | **PUT**      | /api/product/{id}           | Edit product          |
 | **DELETE**   | /api/product/{id}           | Delete product        |
- -------------  ------------------------------ -----------------------
 | **GET**      | /api/categories             | Categories index      |
 | **POST**     | /api/category/new           | Create category       |
 | **POST**     | /api/category/{id}          | Show category by id   |
